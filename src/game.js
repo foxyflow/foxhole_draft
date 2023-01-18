@@ -1,4 +1,5 @@
 
+
 var config = {
     type: Phaser.AUTO,
     width: 1200,
@@ -7,7 +8,7 @@ var config = {
         default: 'arcade',
         arcade: {
             debug: true,
-            gravity: { y: 0 } // Top down game, so no gravity
+            gravity: { y: 0 } // Top down game, so no gravity.
         }
     },
     scene: {
@@ -16,26 +17,25 @@ var config = {
         update: update
     }
 };
-
 var game = new Phaser.Game(config);
-//var cursors;
+
 
 function preload (){
-    //load assets
+    //Load assets:
     this.load.image('tiles', 'src/assets/dungeon.png'); //dungeon tileset (1)
     this.load.image('tileset', 'src/assets/tileset.png'); // fox tileset (2)
     this.load.image('castle_tileset', 'src/assets/castle_tileset.png'); // castle tileset (3
     this.load.tilemapTiledJSON('map1', 'src/assets/map1.json');
-    this.load.image('player', 'src/assets/player-crouch-1-15x15.png');
-    this.load.spritesheet('grace', 'src/assets/grace.png', { frameWidth: 32, frameHeight: 80 });
+    //Player just as image:
+        // this.load.image('player', 'src/assets/player-crouch-1-16x15.png');
+    this.load.spritesheet('player', 'src/assets/player-run-184x22.png', { frameWidth: 30, frameHeight: 22 });
 
 
 }
 let player;
-var player2;
 let cursors;
 function create (){
-    //create game objects
+    //Create game objects:
     const map = this.make.tilemap({key: 'map1', tileWidth: 16, tileHeight: 16});
     const tileset = map.addTilesetImage('tiled1', 'tiles');
     const tileset2 = map.addTilesetImage('tiled2', 'tileset');
@@ -43,75 +43,69 @@ function create (){
     const belowLayer = map.createStaticLayer("Below Player", [tileset, tileset2, tileset3], 0, 0);
     const worldLayer = map.createStaticLayer("World",[tileset, tileset2, tileset3], 0, 0);
     const aboveLayer = map.createStaticLayer("Above Player", [tileset, tileset2, tileset3], 0, 0);
-    //create player
-    player2 = this.physics.add.sprite(100, 500, 'grace');
+    
+    //Create player without Tiled: 
+        //player = this.physics.add.sprite(100, 500, 'player');
     const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
     player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "player");
-    player2.setCollideWorldBounds(true);
-    //collision
+    
+    //Collision:
+    player.setCollideWorldBounds(true);
     this.physics.add.collider(player, worldLayer);
     worldLayer.setCollisionByProperty({collides: true});
+    player.body.setSize(player.width - 10, player.height - 10, true); //true centers and the rest changes collisionbox size
 
     this.anims.create({
-        key: 'a',
-        frames: this.anims.generateFrameNumbers('grace', { start: 0, end: 3 }),
-        frameRate: 5,
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
+        frameRate: 10,
         repeat: -1
     });
-
+    // To just have 1 frame, you can use this instead of start and end properties:
+        //     frames: [ { key: 'player', frame: 4 } ],
     this.anims.create({
-        key: 'turn',
-        frames: [ { key: 'grace', frame: 4 } ],
-        frameRate: 5
-    });
-
-    this.anims.create({
-        key: 'd',
-        frames: this.anims.generateFrameNumbers('grace', { start: 0, end: 3 }),
-        frameRate: 5,
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
+        frameRate: 10,
         repeat: -1
     });
-    //this.cursors = this.input.keyboard.createCursorKeys();
     cursors = this.input.keyboard.createCursorKeys();
-    
-}
-const speed = 161;
-const player2speed = 161;
 
+}// End of create
+
+const speed = 161;
 function update (){
     // game logic: updates every frame
     
-    if (cursors.left.isDown)
+    if (cursors.left.isDown )
     {
-        player2.setVelocityX(-player2speed);
+        player.flipX = true;
         player.setVelocityX(-speed);
-        player2.anims.play('a', true);
-        
+        player.anims.play('left', true);
     }
     else if (cursors.up.isDown){
-        player2.setVelocityY(-player2speed);
+       
         player.setVelocityY(-speed);
     }
     else if (cursors.down.isDown){
-        player2.setVelocityY(player2speed);
+        
         player.setVelocityY(speed);
     }
     else if (cursors.right.isDown)
     {
-        player2.setVelocityX(player2speed);
+        player.flipX = false;
         player.setVelocityX(speed);
-        player2.anims.play('d', true);
+        player.anims.play('right', true);
     }
     else
     {
-        player2.setVelocity(0);
         player.setVelocity(0);
-        player2.anims.play('turn');
+        player.anims.play(false);
     }
-    //normalize and scale the velocity so that player can't move faster along a diagonal
+    //Normalise and scale the velocity so that player can't move faster along a diagonal
     player.body.velocity.normalize().scale(speed);
-    player2.body.velocity.normalize().scale(speed);
-}
+    
+} // End of update.
 
 
 
