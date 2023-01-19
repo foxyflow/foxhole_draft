@@ -7,7 +7,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false,
+            debug: true,
             gravity: { y: 0 } // Top down game, so no gravity.
         }
     },
@@ -32,6 +32,7 @@ function preload (){
     this.load.tilemapTiledJSON('map1', 'src/assets/map1.json');
     //Player just as image:
     this.load.spritesheet('player', 'src/assets/player-run-184x22.png', { frameWidth: 30, frameHeight: 22 });
+    this.load.spritesheet('playerIdle', 'src/assets/playerIdle120x22.png', { frameWidth: 30, frameHeight: 22 });
 }
 let player;
 let cursors;
@@ -45,9 +46,9 @@ function create (){
     const tileset5 = map.addTilesetImage('tiled5', 'tilesetdeep');
     const tileset6 = map.addTilesetImage('tiled6', 'tilesetpurple');
     const tileset7 = map.addTilesetImage('tiled7', 'coolcastle');
-    const belowLayer = map.createStaticLayer("Below Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
-    const worldLayer = map.createStaticLayer("World",[tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
-    const aboveLayer = map.createStaticLayer("Above Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
+    const belowLayer = map.createLayer("Below Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
+    const worldLayer = map.createLayer("World",[tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
+    const aboveLayer = map.createLayer("Above Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
     
     //Create player without Tiled Object Spawn Point: 
         //player = this.physics.add.sprite(100, 500, 'player');
@@ -63,7 +64,7 @@ function create (){
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
-        frameRate: 10,
+        frameRate: 15,
         repeat: -1
     });
     // To just have 1 frame, you can use this instead of start and end properties:
@@ -71,12 +72,12 @@ function create (){
     this.anims.create({
         key: 'right',
         frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
-        frameRate: 10,
+        frameRate: 15,
         repeat: -1
     });
-    this.anims.create({ //not active yet. -- Add Sprite
-        key: 'down',
-        frames: this.anims.generateFrameNumbers('player', { start: 0, end: 1 }),
+    this.anims.create({ 
+        key: 'idle',
+        frames: this.anims.generateFrameNumbers('playerIdle', { start: 0, end: 3 }),
         frameRate: 10,
         repeat: -1
     });
@@ -98,7 +99,7 @@ function update (){
     else if (cursors.down.isDown){
        
         player.setVelocityY(speed);
-        player.anims.play('down', true);//not active yet.
+        
     }
     else if (cursors.up.isDown){
         
@@ -112,9 +113,12 @@ function update (){
     }
     else
     {
+        
         player.setVelocity(0);
-        player.anims.play(false);
+        player.anims.play(false); // Stops the animation.
+        player.anims.play('idle', true);  
     }
+
     //Normalise and scale the velocity so that player can't move faster along a diagonal
     player.body.velocity.normalize().scale(speed);
     
