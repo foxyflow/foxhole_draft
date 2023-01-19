@@ -54,7 +54,10 @@ function create (){
     const belowLayer = map.createLayer("Below Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
     const worldLayer = map.createLayer("World",[tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
     const aboveLayer = map.createLayer("Above Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
-    
+    belowLayer.setDepth(0); //0 is default -- no need to set it
+    worldLayer.setDepth(1); //player between layers.
+    aboveLayer.setDepth(2); //player can now go under layers (1 and 2, which weren't needed to be set).
+
     //Create player without Tiled Object Spawn Point: 
         //player = this.physics.add.sprite(100, 500, 'player');
     const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
