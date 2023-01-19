@@ -7,7 +7,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            debug: false,
             gravity: { y: 0 } // Top down game, so no gravity.
         }
     },
@@ -34,8 +34,13 @@ function preload (){
     this.load.spritesheet('player', 'src/assets/player-run-184x22.png', { frameWidth: 30, frameHeight: 22 });
     this.load.spritesheet('playerIdle', 'src/assets/playerIdle120x22.png', { frameWidth: 30, frameHeight: 22 });
 }
+
 let player;
 let cursors;
+let A;
+let D;
+let W;
+let S;
 function create (){
     //Create game objects:
     const map = this.make.tilemap({key: 'map1', tileWidth: 16, tileHeight: 16});
@@ -83,6 +88,10 @@ function create (){
     });
 
     cursors = this.input.keyboard.createCursorKeys();
+    A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
 }// End of create
 
@@ -90,22 +99,22 @@ const speed = 150;
 function update (){
 // game logic: updates every frame
     
-    if (cursors.left.isDown )
+    if (A.isDown || cursors.left.isDown)
     {
         player.flipX = true;
         player.setVelocityX(-speed);
         player.anims.play('left', true);
     }
-    else if (cursors.down.isDown){
+    else if (S.isDown || cursors.down.isDown){
        
         player.setVelocityY(speed);
         
     }
-    else if (cursors.up.isDown){
+    else if (W.isDown || cursors.up.isDown){
         
         player.setVelocityY(-speed);
     }
-    else if (cursors.right.isDown)
+    else if (D.isDown || cursors.right.isDown)
     {
         player.flipX = false;
         player.setVelocityX(speed);
