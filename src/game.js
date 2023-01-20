@@ -37,7 +37,7 @@ function preload (){
 
 let player;
 let cursors;
-let A;
+let A; // works without declaring it.
 let D;
 let W;
 let S;
