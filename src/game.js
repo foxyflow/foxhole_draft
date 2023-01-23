@@ -1,6 +1,6 @@
 
 
-var config = {
+let config = {
     type: Phaser.AUTO,
     width: 1200,
     height: 592,
@@ -17,7 +17,7 @@ var config = {
         update: update
     }
 };
-var game = new Phaser.Game(config);
+let game = new Phaser.Game(config);
 
 
 function preload (){
@@ -29,6 +29,7 @@ function preload (){
     this.load.image('tilesetdeep', 'src/assets/tilesetdeep.png'); // deep tileset (5)
     this.load.image('tilesetpurple', 'src/assets/tilesetpurple.png'); // purple tileset (6)
     this.load.image('coolcastle', 'src/assets/coolcastle-tileset.png'); // cool castle tileset (7)
+    this.load.image('alex', 'src/assets/alex.png'); // alex tileset (8)
     this.load.tilemapTiledJSON('map1', 'src/assets/map1.json');
     //Player just as image:
     this.load.spritesheet('player', 'src/assets/player-run-184x22.png', { frameWidth: 30, frameHeight: 22 });
@@ -51,12 +52,15 @@ function create (){
     const tileset5 = map.addTilesetImage('tiled5', 'tilesetdeep');
     const tileset6 = map.addTilesetImage('tiled6', 'tilesetpurple');
     const tileset7 = map.addTilesetImage('tiled7', 'coolcastle');
-    const belowLayer = map.createLayer("Below Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
-    const worldLayer = map.createLayer("World",[tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
-    const aboveLayer = map.createLayer("Above Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7], 0, 0);
+    const tileset8 = map.addTilesetImage('tiled8', 'alex');
+    const aboveGround = map.createLayer("Above Ground", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8], 0, 0);
+    const belowLayer = map.createLayer("Below Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8], 0, 0);
+    const worldLayer = map.createLayer("World",[tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8], 0, 0);
+    const aboveLayer = map.createLayer("Above Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8], 0, 0);
     belowLayer.setDepth(0); //0 is default -- no need to set it
-    worldLayer.setDepth(1); //player between layers.
-    aboveLayer.setDepth(2); //player can now go under layers (1 and 2, which weren't needed to be set).
+    aboveGround.setDepth(1); //player between layers.
+    worldLayer.setDepth(2); 
+    aboveLayer.setDepth(3); //player can now go under layers (1 and 2, which weren't needed to be set).
 
     //Create player without Tiled Object Spawn Point: 
         //player = this.physics.add.sprite(100, 500, 'player');
@@ -105,7 +109,8 @@ function update (){
     if (A.isDown || cursors.left.isDown)
     {
         player.flipX = true;
-        player.setVelocityX(-speed);
+        //player.setVelocityX(-speed); // This is the same as:
+        player.body.velocity.x = -speed;
         player.anims.play('left', true);
     }
     else if (S.isDown || cursors.down.isDown){
