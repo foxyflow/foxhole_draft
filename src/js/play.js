@@ -138,17 +138,22 @@ class Play{
         if(this.physics.overlap(this.player, this.coin)){
             this.takeCoin();
         }
-
+        //to not call player info if it's dead:
+        if (!this.player.active){
+            return;
+        }
     } // End of update.
 
     //Methods:
 
     //death be not proud
     playerDie(){
+        this.player.destroy();
+        this.scene.start('menu', {score: this.score});
         this.dieSound.play();
         this.score = 0; //reset score
         this.bgMusic.stop();
-       // this.cameras.main.flash(300, 255, 50, 35); //flash effect - ms, r, g, b
+        this.cameras.main.flash(999, 255, 50, 35); //flash effect - ms, r, g, b
 
     }
     //take a coin
