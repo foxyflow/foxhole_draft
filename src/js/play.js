@@ -35,7 +35,7 @@ class Play{
         aboveLayer.setDepth(3); //player can now go under layers (1 and 2, which weren't needed to be set).
 
         //add coins:
-        this.coin = this.physics.add.sprite(310, 300, 'coin');
+        this.coin = this.physics.add.sprite(440, 325, 'coin');
         //display coin score: //this.add.text(x,y,text,style) (style is an object)
         this.scoreLabel = this.add.text(98, 15, 'Score: 0', { font: '16px Arial', fill: '#fff', backgroundColor: '#000' });
         
@@ -93,25 +93,25 @@ class Play{
      speed = 1500; // (works if commented out of constructor)
      update (){
     // game logic: updates every frame
-        // call movePlayer method:
-        this.movePlayer();
+       
+        this.movePlayer();  // call movePlayer method
         //player die
         if (this.player.y > 550 || this.player.y < 10 || this.player.x > 1190 || this.player.x < 10){
             this.playerDie();
+        }
+        if (this.player.x > 440 && this.player.x < 456 && this.player.y > 325 && this.player.y < 309){
+            this.playerDie(); // death area on map.
         }
         //taking a coin: this.physics.add.overlap(objectA, objectB)
         if(this.physics.overlap(this.player, this.coin)){
             this.takeCoin();
         }
-        //to not call player info if it's dead:
-        if (!this.player.active){
-            return;
-        }
-    } // End of update.
+        
+    }; // End of update.
 
     //Methods:
     movePlayer(){
-        if(!this.player.active){ //this code is not needed.
+        if(!this.player.active){  //to not call player info if it's dead.
             return;
         }
         
