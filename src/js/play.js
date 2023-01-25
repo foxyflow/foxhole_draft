@@ -1,4 +1,4 @@
-
+//Main game scene:
 class Play{
     
         constructor (player, cursors, A, D, W, S)
@@ -39,7 +39,7 @@ class Play{
         //display coin score: //this.add.text(x,y,text,style) (style is an object)
         this.scoreLabel = this.add.text(98, 15, 'Score: 0', { font: '16px Arial', fill: '#fff', backgroundColor: '#000' });
         
-        //create sounds:
+        //create sounds: (maybe add to constructor)
         this.coinSound = this.sound.add('coin');
         this.dieSound = this.sound.add('die');
         this.bgMusic = this.sound.add('backgroundMusic');
@@ -59,6 +59,7 @@ class Play{
         worldLayer.setCollisionByProperty({collides: true});
         this.player.body.setSize(this.player.width - 20, this.player.height - 10, true); //true centers and the rest changes collisionbox size
 
+        //Animated player:
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
@@ -73,14 +74,15 @@ class Play{
             frameRate: 15,
             repeat: -1
         });
-        this.anims.create({ 
+        this.anims.create({ //Idle not working
             key: 'idle',
             frames: this.anims.generateFrameNumbers('playerIdle', [0,1,2,3,]),
             frameRate: 8,
             repeat: -1
         });
 
-       this.cursors = this.input.keyboard.createCursorKeys();
+        //declaring keyboard keys (could be in constructor)
+        this.cursors = this.input.keyboard.createCursorKeys();
         this.A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -88,9 +90,27 @@ class Play{
 
     }// End of create
 
-     //speed = 1500; // (works if commeted out of constructor)
+     speed = 1500; // (works if commented out of constructor)
      update (){
     // game logic: updates every frame
+        // call movePlayer method:
+        this.movePlayer();
+        //player die
+        if (this.player.y > 550 || this.player.y < 10 || this.player.x > 1190 || this.player.x < 10){
+            this.playerDie();
+        }
+        //taking a coin: this.physics.add.overlap(objectA, objectB)
+        if(this.physics.overlap(this.player, this.coin)){
+            this.takeCoin();
+        }
+        //to not call player info if it's dead:
+        if (!this.player.active){
+            return;
+        }
+    } // End of update.
+
+    //Methods:
+    movePlayer(){
         if(!this.player.active){ //this code is not needed.
             return;
         }
@@ -125,26 +145,11 @@ class Play{
             this.player.anims.play(false); // Stops the animation.
             this.player.anims.play('idle', true);  
         }
-        
+    
 
         //Normalise and scale the velocity so that player can't move faster along a diagonal
         this.player.body.velocity.normalize().scale(this.speed);
-        
-        //player die
-        if (this.player.y > 550 || this.player.y < 10 || this.player.x > 1190 || this.player.x < 10){
-            this.playerDie();
-        }
-        //taking a coin: this.physics.add.overlap(objectA, objectB)
-        if(this.physics.overlap(this.player, this.coin)){
-            this.takeCoin();
-        }
-        //to not call player info if it's dead:
-        if (!this.player.active){
-            return;
-        }
-    } // End of update.
-
-    //Methods:
+    } // End of movePlayer
 
     //death be not proud
     playerDie(){
@@ -156,7 +161,7 @@ class Play{
         this.cameras.main.flash(999, 255, 50, 35); //flash effect - ms, r, g, b
 
     }
-    //take a coin
+    //take a coin (moneybag)
     takeCoin(){
         this.coinSound.play();
         this.coin.destroy();
@@ -165,7 +170,7 @@ class Play{
         
     }
 
-}; // End of class Main
+}; // End of class Play
 
 
 

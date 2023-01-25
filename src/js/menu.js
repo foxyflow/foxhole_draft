@@ -10,7 +10,7 @@ class Menu{
         // add background // was 0, 0 not 250 170
         this.add.image(250, 170, 'background').setOrigin(0, 0);
         // add title
-        let nameLabel = this.add.text(250, 80, 'Find Alexx', {font: '50px Arial', fill: '#ffffff'});
+        let nameLabel = this.add.text(250, 80, 'You deeead', {font: '50px Arial', fill: '#ffffff'});
         nameLabel.setOrigin(0.5, 0.5);
         // display score
         let scoreText = 'score: ' + score;
