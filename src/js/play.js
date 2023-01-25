@@ -1,5 +1,5 @@
 
-class Main{
+class Play{
     
         constructor (player, cursors, A, D, W, S)
         {
@@ -11,33 +11,9 @@ class Main{
             this.S = S;
             this.speed = 100;
             this.score = 0;
+            
         }
 
-
-     preload (){
-        //Load assets:
-        this.load.image('tiles', 'src/assets/dungeon.png'); //dungeon tileset (1)
-        this.load.image('tileset', 'src/assets/tileset.png'); // fox tileset (2)
-        this.load.image('castle_tileset', 'src/assets/castle_tileset.png'); // castle tileset (3
-        this.load.image('tileset_grassland', 'src/assets/tileset_grassland.png'); // grassland tileset (4)
-        this.load.image('tilesetdeep', 'src/assets/tilesetdeep.png'); // deep tileset (5)
-        this.load.image('tilesetpurple', 'src/assets/tilesetpurple.png'); // purple tileset (6)
-        this.load.image('coolcastle', 'src/assets/coolcastle-tileset.png'); // cool castle tileset (7)
-        this.load.image('alex', 'src/assets/alex.png'); // alex tileset (8)
-        this.load.tilemapTiledJSON('map1', 'src/assets/map1.json');
-        //Player just as image:
-        this.load.spritesheet('player', 'src/assets/player-run-184x22.png', { frameWidth: 30, frameHeight: 22 });
-        this.load.spritesheet('playerIdle', 'src/assets/playerIdle120x22.png', { frameWidth: 30, frameHeight: 22 });
-
-        this.load.image('coin', 'src/assets/alex_money.png');
-    } //end preload
-
-   // let player;
-   // let cursors;
-    //let A; // works without declaring it.
-    //let D;
-   // let W;
-   // let S;
     create (){
         //Create game objects:
         const map = this.make.tilemap({key: 'map1', tileWidth: 16, tileHeight: 16});
@@ -63,6 +39,14 @@ class Main{
         //display coin score: //this.add.text(x,y,text,style) (style is an object)
         this.scoreLabel = this.add.text(98, 15, 'Score: 0', { font: '16px Arial', fill: '#fff', backgroundColor: '#000' });
         
+        //create sounds:
+        this.coinSound = this.sound.add('coin');
+        this.dieSound = this.sound.add('die');
+        this.bgMusic = this.sound.add('backgroundMusic');
+        this.bgMusic.play();
+        this.bgMusic.loop = true;
+        this.bgMusic.volume = 0.2;
+
 
         //Create player without Tiled Object Spawn Point: 
             //this.player = this.physics.add.sprite(100, 500, 'player');
@@ -91,8 +75,8 @@ class Main{
         });
         this.anims.create({ 
             key: 'idle',
-            frames: this.anims.generateFrameNumbers('playerIdle', { start: 0, end: 3 }),
-            frameRate: 10,
+            frames: this.anims.generateFrameNumbers('playerIdle', [0,1,2,3,]),
+            frameRate: 8,
             repeat: -1
         });
 
@@ -107,6 +91,9 @@ class Main{
      //speed = 1500; // (works if commeted out of constructor)
      update (){
     // game logic: updates every frame
+        if(!this.player.active){ //this code is not needed.
+            return;
+        }
         
         if (this.A.isDown || this.cursors.left.isDown)
         {
@@ -154,44 +141,27 @@ class Main{
 
     } // End of update.
 
-    //Functions:
+    //Methods:
 
     //death be not proud
     playerDie(){
-        this.scene.start('main');
+        this.dieSound.play();
+        this.score = 0; //reset score
+        this.bgMusic.stop();
+       // this.cameras.main.flash(300, 255, 50, 35); //flash effect - ms, r, g, b
+
     }
     //take a coin
     takeCoin(){
+        this.coinSound.play();
         this.coin.destroy();
         this.score += 10;
         this.scoreLabel.text = 'Score: ' + this.score;
         
-        
     }
-  
 
 }; // End of class Main
-let config = {
-    type: Phaser.AUTO,
-    width: 1200,
-    height: 592,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            debug: false,
-            gravity: { y: 0 } // Top down game, so no gravity.
-        }
-    },
-    scene: {
-        preload: this.preload,
-        create: this.create,
-        update: this.update
-    },
-    parent: 'game'
-};
-let game = new Phaser.Game(config);
-game.scene.add('main', Main);
-game.scene.start('main');
+
 
 
 
