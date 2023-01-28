@@ -1,9 +1,13 @@
+import Phaser from 'phaser';
 
-
-class Menu{
+export default class Menu{
+    add: any;
+    upKey: any;
+    input: any;
+    scene: any;
 
     //data pram is object coming from Play scene.
-    create(data){
+    create(data: { score: any; }){
         // get score
         let score = data.score ?
             data.score : 0;

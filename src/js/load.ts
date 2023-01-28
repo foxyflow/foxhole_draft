@@ -1,6 +1,9 @@
 
 
-class Load{
+export default class Load{
+    load: any;
+    scene: any;
+    add: any;
     
     //Load assets:
     preload (){

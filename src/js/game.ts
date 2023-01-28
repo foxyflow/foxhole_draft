@@ -1,4 +1,7 @@
-
+import Phaser from 'phaser';
+import Load from './load';
+import Menu from './menu';
+import Play from './play';
 
 let game = new Phaser.Game({
     //type: Phaser.AUTO,

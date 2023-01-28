@@ -1,7 +1,28 @@
 //Main game scene:
-class Play{
+import Phaser from 'phaser';
+export default class Play{
+    player: any;
+    cursors: any;
+    A: any;
+    D: any;
+    W: any;
+    S: any;
+    score: number;
+    make: any;
+    coin: any;
+    physics: any;
+    scoreLabel: any;
+    add: any;
+    coinSound: any;
+    sound: any;
+    dieSound: any;
+    bgMusic: any;
+    anims: any;
+    input: any;
+    scene: any;
+    cameras: any;
     
-        constructor (player, cursors, A, D, W, S)
+        constructor (player: any, cursors: any, A: any, D: any, W: any, S: any)
         {
             this.player = player;
             this.cursors = cursors;
@@ -50,7 +71,7 @@ class Play{
 
         //Create player without Tiled Object Spawn Point: 
             //this.player = this.physics.add.sprite(100, 500, 'player');
-        const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
+        const spawnPoint = map.findObject("Objects", (obj: { name: string; }) => obj.name === "Spawn Point");
         this.player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "player");
         
         //Collision:
@@ -91,9 +112,9 @@ class Play{
     }// End of create
 
      speed = 1500; // (works if commented out of constructor)
-     update (){
+    update (){
     // game logic: updates every frame
-       
+    
         this.movePlayer();  // call movePlayer method
         //player die
         if (this.player.y > 550 || this.player.y < 10 || this.player.x > 1190 || this.player.x < 10){
