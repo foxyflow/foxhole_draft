@@ -1,8 +1,8 @@
-<h1 align="center">
+<h1 text-align="center">
   <br>
-  <a href="https://github.com/geocine/phaser3-rollup-typescript#readme"><img src="https://i.imgur.com/6lcIxDs.png" alt="header" width="600"/></a>
+  <a href="https://github.com/foxyflow/down_the_foxhole#readme"><img src="https://i.imgur.com/6lcIxDs.png" alt="header" width="600"/></a>
   <br>
-  Phaser 3 TypeScript Starter
+  Phaser 3 TypeScript Game
   <br>
 </h1>
 
