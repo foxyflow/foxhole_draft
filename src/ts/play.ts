@@ -1,5 +1,5 @@
-//Main game scene:
 import Phaser from 'phaser';
+//Main game scene:
 export default class Play{
     player: any;
     cursors: any;
