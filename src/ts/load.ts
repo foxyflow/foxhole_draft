@@ -1,10 +1,13 @@
 
 
-export default class Load{
+export default class Load extends Phaser.Scene {
+    constructor () {
+        super('load');
+
+    } 
     load: any;
     scene: any;
     add: any;
-    
     //Load assets:
     preload (){
         //load menu background image:

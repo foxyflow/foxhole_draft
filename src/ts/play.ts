@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 //Main game scene:
-export default class Play{
+export default class Play extends Phaser.Scene {
     player: any;
     cursors: any;
     A: any;
@@ -9,7 +9,6 @@ export default class Play{
     S: any;
     score: number;
     make: any;
-    coin: any;
     physics: any;
     scoreLabel: any;
     add: any;
@@ -21,9 +20,17 @@ export default class Play{
     input: any;
     scene: any;
     cameras: any;
+    aboveGround: any;
+    belowLayer: any;
+    worldLayer: any;
+    aboveLayer: any;
+    coin: any;
     
-        constructor (player: any, cursors: any, A: any, D: any, W: any, S: any)
+
+    
+        constructor (player: any, cursors: any, A: any, D: any, W: any, S: any, coin: any)
         {
+            super('play');
             this.player = player;
             this.cursors = cursors;
             this.A = A;
@@ -32,6 +39,8 @@ export default class Play{
             this.S = S;
             this.speed = 100;
             this.score = 0;
+            
+            
             
         }
 
@@ -50,10 +59,10 @@ export default class Play{
         const belowLayer = map.createLayer("Below Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8], 0, 0);
         const worldLayer = map.createLayer("World",[tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8], 0, 0);
         const aboveLayer = map.createLayer("Above Player", [tileset, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8], 0, 0);
-        belowLayer.setDepth(0); //0 is default -- no need to set it
-        aboveGround.setDepth(1); //player between layers.
-        worldLayer.setDepth(2); 
-        aboveLayer.setDepth(3); //player can now go under layers (1 and 2, which weren't needed to be set).
+        belowLayer?.setDepth(0); //0 is default -- no need to set it
+        aboveGround?.setDepth(1); //player between layers.
+        worldLayer?.setDepth(2); 
+        aboveLayer?.setDepth(3); //player can now go under layers (1 and 2, which weren't needed to be set).
 
         //add coins:
         this.coin = this.physics.add.sprite(440, 325, 'coin');
